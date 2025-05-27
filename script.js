@@ -41,6 +41,34 @@ const factorial = function (n) {
   let a = null;
   let operador = null;
   let b = null;
+  let resultadoPrevio = null;
+
+  display.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      // Validar antes de calcular
+      const value = display.value;
+      const match = value.match(/^(-?\d*\.?\d*)([+\-*/])(-?\d*\.?\d*)$/);
+
+      if (match) {
+        a = parseFloat(match[1]);
+        operador = match[2];
+        b = parseFloat(match[3]);
+
+        const resultado = calcular(a, operador, b);
+        if (resultado !== null) {
+          display.value = resultado;
+          resultadoPrevio = resultado.toString();
+
+          // Resetear valores para próxima operación
+          a = operador = b = null;
+        }
+      } else {
+        alert("Expresión incompleta o inválida");
+      }
+    }
+  });
 
   display.addEventListener("input", () => {
     let value = display.value;
@@ -48,33 +76,47 @@ const factorial = function (n) {
     // Eliminar caracteres inválidos
     value = value.replace(/[^0-9+\-*/.]/g, "");
 
-    // Regex actualizado: permite negativos al inicio o en el segundo número
+    // Si hay resultado anterior y el usuario empieza a escribir un operador, continuar la operación
+    if (resultadoPrevio && /^[+\-*/]$/.test(value)) {
+      value = resultadoPrevio + value;
+      resultadoPrevio = null;
+    }
+
+    // Validar estructura general
     const match = value.match(/^(-?\d*\.?\d*)([+\-*/]?)(-?\d*\.?\d*)$/);
 
     if (match) {
-      display.value = match[1] + match[2] + match[3];
+      a = match[1];
+      operador = match[2];
+      b = match[3];
+      display.value = `${a}${operador}${b}`;
+
+      if (a && operador && b !== "") {
+        console.log("a:", a, "operador:", operador, "b:", b);
+      }
     } else {
-      // Si no es una expresión válida, se limpia
-      alert("Entrada inválida. Por favor, ingrese una expresión válida.");
-      display.value = "";
+      // Expresión inválida → eliminar último carácter
+      alert("Expresión inválida");
+      display.value = value.slice(0, -1);
     }
   });
 
-
-
-const operate = function(operator, a, b) {
-    switch (operator) {
-        case '+':
-            return add(a, b);
-        case '-':
-            return subtract(a, b);
-        case '*':
-            return multiply([a, b]);
-        case '/':
-            return divide(a, b);
-        case '^':
-            return power(a, b);
-        default:
-            throw new Error("Invalid operator");
+  function calcular(a, operador, b) {
+    switch (operador) {
+      case "+": return a + b;
+      case "-": return a - b;
+      case "*": return a * b;
+      case "/": return b !== 0 ? a / b : "Error";
+      default: return null;
     }
-}
+    /*-------------- BOTON CLEAR -------------*/
+const clearBtn = document.getElementById("clear");
+
+  clearBtn.addEventListener("click", () => {
+    display.value = "";
+    a = null;
+    b = null;
+    operador = null;
+    resultadoPrevio = null;
+  });
+  }
