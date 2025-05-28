@@ -46,6 +46,13 @@ display.addEventListener("input", () => {
     a = match[1];
     operador = match[2];
     b = match[3];
+// Validar que no haya múltiples puntos en a o b
+if ((a.match(/\./g) || []).length > 1 || (b.match(/\./g) || []).length > 1) {
+    alert("Solo se permite un punto decimal por número");
+    display.value = value.slice(0, -1);
+    return;
+  }
+
     display.value = `${a}${operador}${b}`;
 
     if (a && operador && b !== "") {
