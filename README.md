@@ -1,4 +1,4 @@
-# calculator# 🧮 Calculadora Web
+# 🧮 Calculadora Web
 
 Una calculadora moderna y funcional construida con **HTML**, **CSS** y **JavaScript**. Soporta operaciones básicas, manejo de errores, validaciones en tiempo real, y tiene un diseño responsive atractivo.
 
