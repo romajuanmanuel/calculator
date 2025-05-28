@@ -1,6 +1,21 @@
 // Validación de entrada del usuario en el campo de texto
 const display = document.getElementById("display");
 
+// Asegura que el input tenga el foco al cargar
+window.addEventListener("load", () => {
+  display.focus();
+});
+
+// Asegura que el input vuelva a tener foco si lo pierde
+document.addEventListener("click", () => {
+  display.focus();
+});
+
+// Evita que el usuario lo deseleccione con tabulación u otro evento
+display.addEventListener("blur", () => {
+  setTimeout(() => display.focus(), 0);
+});
+
 let a = null;
 let operador = null;
 let b = null;
