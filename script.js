@@ -31,38 +31,45 @@ display.addEventListener("keydown", (e) => {
 });
 
 display.addEventListener("input", () => {
-  let value = display.value;
-
-  value = value.replace(/[^0-9+\-*/.]/g, "");
-
-  if (resultadoPrevio && /^[+\-*/]$/.test(value)) {
-    value = resultadoPrevio + value;
-    resultadoPrevio = null;
-  }
-
-  const match = value.match(/^(-?\d*\.?\d*)([+\-*/]?)(-?\d*\.?\d*)$/);
-
-  if (match) {
-    a = match[1];
-    operador = match[2];
-    b = match[3];
-// Validar que no haya múltiples puntos en a o b
-if ((a.match(/\./g) || []).length > 1 || (b.match(/\./g) || []).length > 1) {
-    alert("Solo se permite un punto decimal por número");
-    display.value = value.slice(0, -1);
-    return;
-  }
-
-    display.value = `${a}${operador}${b}`;
-
-    if (a && operador && b !== "") {
-      console.log("a:", a, "operador:", operador, "b:", b);
+    let value = display.value;
+  
+    // Solo permitir números, operadores y punto
+    value = value.replace(/[^0-9+\-*/.]/g, "");
+  
+    // Si hay resultado previo y se empieza con un operador, continuar la operación
+    if (resultadoPrevio && /^[+\-*/]$/.test(value)) {
+      value = resultadoPrevio + value;
+      resultadoPrevio = null;
     }
-  } else {
-    alert("Expresión inválida");
-    display.value = value.slice(0, -1);
-  }
-});
+  
+    const match = value.match(/^(-?\d*\.?\d*)([+\-*/]?)(-?\d*\.?\d*)$/);
+  
+    if (match) {
+      a = match[1];
+      operador = match[2];
+      b = match[3];
+  
+      // ❌ Validar múltiples puntos en a o b
+      const puntosA = (a.match(/\./g) || []).length;
+      const puntosB = (b.match(/\./g) || []).length;
+  
+      if (puntosA > 1 || puntosB > 1) {
+        alert("Solo se permite un punto decimal por número");
+        display.value = value.slice(0, -1);
+        return;
+      }
+  
+      display.value = `${a}${operador}${b}`;
+  
+      if (a && operador && b !== "") {
+        console.log("a:", a, "operador:", operador, "b:", b);
+      }
+    } else {
+      // Si rompe la estructura general (por ejemplo doble operador), eliminar último carácter
+      alert("Expresión inválida");
+      display.value = value.slice(0, -1);
+    }
+  });
 
 /*-------------- BOTON CLEAR -------------*/
 const clearBtn = document.getElementById("clear");

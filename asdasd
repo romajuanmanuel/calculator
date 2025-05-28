@@ -1,35 +1,107 @@
-display.addEventListener("input", () => {
-  let value = display.value;
-
-  // Eliminar caracteres inválidos
-  value = value.replace(/[^0-9+\-*/.]/g, "");
-
-  if (resultadoPrevio && /^[+\-*/]$/.test(value)) {
-    value = resultadoPrevio + value;
-    resultadoPrevio = null;
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  body {
+    background: #20262E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .calculator {
+    background: #2F3640;
+    border-radius: 16px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  }
+  
+  #display {
+    width: 100%;
+    padding: 20px;
+    font-size: 2rem;
+    text-align: right;
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    background: #1E272E;
+    color: #fff;
+    outline: none;
+  }
+  
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+  }
+  
+  button {
+    padding: 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: #353B48;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    background: #4B6584;
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+  
+  #equals {
+    background: #26de81;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  #equals:hover {
+    background: #20bf6b;
+  }
+  
+  .clear {
+    grid-column: span 4;
+    background: #eb3b5a;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .clear:hover {
+    background: #ff3f34;
   }
 
-  const match = value.match(/^(-?\d*\.?\d*)([+\-*/]?)(-?\d*\.?\d*)$/);
+  <div class="calculator">
+  <input id="display" type="text" readonly />
 
-  if (match) {
-    a = match[1];
-    operador = match[2];
-    b = match[3];
+  <div class="buttons">
+    <button data-value="7">7</button>
+    <button data-value="8">8</button>
+    <button data-value="9">9</button>
+    <button data-value="/">÷</button>
 
-    // Validar que no haya múltiples puntos en a o b
-    if ((a.match(/\./g) || []).length > 1 || (b.match(/\./g) || []).length > 1) {
-      alert("Solo se permite un punto decimal por número");
-      display.value = value.slice(0, -1);
-      return;
-    }
+    <button data-value="4">4</button>
+    <button data-value="5">5</button>
+    <button data-value="6">6</button>
+    <button data-value="*">×</button>
 
-    display.value = `${a}${operador}${b}`;
+    <button data-value="1">1</button>
+    <button data-value="2">2</button>
+    <button data-value="3">3</button>
+    <button data-value="-">−</button>
 
-    if (a && operador && b !== "") {
-      console.log("a:", a, "operador:", operador, "b:", b);
-    }
-  } else {
-    alert("Expresión inválida");
-    display.value = value.slice(0, -1);
-  }
-});
+    <button data-value="0">0</button>
+    <button data-value=".">.</button>
+    <button id="equals">=</button>
+    <button data-value="+">+</button>
+
+    <button id="clear" class="clear">C</button>
+  </div>
+</div>
